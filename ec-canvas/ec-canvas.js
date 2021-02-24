@@ -78,9 +78,11 @@ Component({
 
   methods: {
     init: function (callback) {
-      const version = wx.getSystemInfoSync().SDKVersion
+      const { SDKVersion: version, platform } = wx.getSystemInfoSync()
 
-      const canUseNewCanvas = compareVersion(version, '2.9.0') >= 0;
+      // 判断设备平台是否支持使用新canvas
+      const isSupportNewCanvas = /devtools|ios|android/.test(platform);
+      const canUseNewCanvas = isSupportNewCanvas && compareVersion(version, '2.9.0') >= 0;
       const forceUseOldCanvas = this.data.forceUseOldCanvas;
       const isUseNewCanvas = canUseNewCanvas && !forceUseOldCanvas;
       this.setData({ isUseNewCanvas });
